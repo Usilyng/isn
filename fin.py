@@ -62,17 +62,20 @@ class Bullet(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.bottom = y
         self.rect.centerx = x
-        
+
         if player.vel.x >= 0:
         	self.speedx = 10
         elif player.vel.x < 0:
         	self.speedx = -10
-        
+
 
     def update(self):
         self.rect.x += self.speedx
-        
-        if self.rect.bottom < 0:
+
+        if self.rect.x < 0:
+            self.kill()
+
+        if self.rect.x > WIDTH:
             self.kill()
 
 class Platform(pygame.sprite.Sprite):
@@ -87,8 +90,8 @@ class Platform(pygame.sprite.Sprite):
 all_sprites = pygame.sprite.Group()
 platforms = pygame.sprite.Group()
 player = Player(WIDTH/4,HEIGHT/2)
-player2 = Player((WIDTH/4)*3,HEIGHT/2)
-all_sprites.add(player,player2)
+#player2 = Player((WIDTH/4)*3,HEIGHT/2)
+all_sprites.add(player)
 for plat in PLATFORM_LIST:
     p = Platform(*plat)
     all_sprites.add(p)
@@ -108,33 +111,33 @@ def events():
 				player.jump()
 
 def test(player):
-	pass
-	if player.vel.y > 0:
-		hits = pygame.sprite.spritecollide(player, platforms, False)
-		if hits:
-			player.pos.y = hits[0].rect.top
-			player.vel.y = 0
 
-	if player.rect.top <= HEIGHT / 4:
-		player.pos.y += abs(player.vel.y)
-		for plat in platforms:
-			plat.rect.y += abs(player.vel.y)
-			if plat.rect.top >= HEIGHT:
-				plat.kill()
+    if player.vel.y > 0:
+        hits = pygame.sprite.spritecollide(player, platforms, False)
+        if hits:
+            player.pos.y = hits[0].rect.top
+            player.vel.y = 0
 
-	if player.rect.bottom > HEIGHT:
-		for sprite in all_sprites:
-			sprite.rect.y -= max(player.vel.y, 10)
-			if sprite.rect.bottom < 0:
-				sprite.kill()
-	if len(platforms) == 0:
-		playing = False
+    if player.rect.top <= HEIGHT / 4:
+        player.pos.y += abs(player.vel.y)
+        for plat in platforms:
+            plat.rect.y += abs(player.vel.y)
+            if plat.rect.top >= HEIGHT:
+                plat.kill()
+
+    if player.rect.bottom > HEIGHT:
+        for sprite in all_sprites:
+            sprite.rect.y -= max(player.vel.y, 10)
+            if sprite.rect.bottom < 0:
+                sprite.kill()
+    if len(platforms) == 0:
+        playing = False
 
 def update():
 	all_sprites.update()
 	test(player)
-	test(player2)
-	
+	#test(player2)
+
 def draw():
 	screen.fill(BLACK)
 	all_sprites.draw(screen)
