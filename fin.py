@@ -1,6 +1,5 @@
 import pygame
 from settings import *
-
 pygame.init()
 pygame.mixer.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -19,39 +18,43 @@ class Player(pygame.sprite.Sprite):
         self.pos = vec(posx, posy)
         self.vel = vec(0, 0)
         self.acc = vec(0, 0)
+        self.move_d=False
+        self.move_g=False
 
     def jump(self):
-        # jump only if standing on a platform
         self.rect.x += 1
         hits = pygame.sprite.spritecollide(self, platforms, False)
         self.rect.x -= 1
         if hits:
             self.vel.y = -20
 
+    def shoot(self):
+        bullet = Bullet(self.rect.centerx, self.rect.centery)
+
+        if bullet.vel.x >= 0:
+            self.speedx = 10
+        elif self.vel.x < 0:
+        	bullet.speedx = -10
+
+        all_sprites.add(bullet)
+
     def update(self):
         self.acc = vec(0, PLAYER_GRAV)
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT]:
+
+        if self.move_g:
             self.acc.x = -PLAYER_ACC
-        if keys[pygame.K_RIGHT]:
+        if self.move_d:
             self.acc.x = PLAYER_ACC
 
-        # apply friction
-        self.acc.x += self.vel.x * PLAYER_FRICTION
-        # equations of motion
         self.vel += self.acc
         self.pos += self.vel + 0.5 * self.acc
-        # wrap around the sides of the screen
+
         if self.pos.x > WIDTH:
             self.pos.x = WIDTH
         if self.pos.x < 0:
             self.pos.x = 0
 
         self.rect.midbottom = self.pos
-
-    def shoot(self):
-    	bullet = Bullet(self.rect.centerx, self.rect.centery)
-    	all_sprites.add(bullet)
 
 
 class Bullet(pygame.sprite.Sprite):
@@ -62,12 +65,6 @@ class Bullet(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.bottom = y
         self.rect.centerx = x
-
-        if player.vel.x >= 0:
-        	self.speedx = 10
-        elif player.vel.x < 0:
-        	self.speedx = -10
-
 
     def update(self):
         self.rect.x += self.speedx
@@ -90,7 +87,7 @@ class Platform(pygame.sprite.Sprite):
 all_sprites = pygame.sprite.Group()
 platforms = pygame.sprite.Group()
 player = Player(WIDTH/4,HEIGHT/2)
-#player2 = Player((WIDTH/4)*3,HEIGHT/2)
+player2 = Player((WIDTH/4)*3,HEIGHT/2)
 all_sprites.add(player)
 for plat in PLATFORM_LIST:
     p = Platform(*plat)
@@ -98,17 +95,26 @@ for plat in PLATFORM_LIST:
     platforms.add(p)
 
 def events():
-	for event in pygame.event.get():
+    for event in pygame.event.get():
 
-		if event.type == pygame.QUIT:
-			if playing:
-				playing = False
-			running = False
-		if event.type == pygame.KEYDOWN:
-			if event.key == pygame.K_SPACE:
-				player.shoot()
-			if event.key == pygame.K_UP:
-				player.jump()
+        if event.type == pygame.QUIT:
+            running = False
+
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_RIGHT:
+                player.move_d=True
+            else :
+                player.move_d=False
+
+            if event.key == pygame.K_LEFT:
+                player.move_g=True
+            else :
+                player.move_g=False
+
+            if event.key == pygame.K_UP:
+                player.jump()
+            if event.key == pygame.K_SPACE:
+                player.shoot()
 
 def test(player):
 
@@ -131,19 +137,17 @@ def test(player):
             if sprite.rect.bottom < 0:
                 sprite.kill()
     if len(platforms) == 0:
-        playing = False
+        running = False
 
 def update():
 	all_sprites.update()
 	test(player)
-	#test(player2)
 
 def draw():
 	screen.fill(BLACK)
 	all_sprites.draw(screen)
 	pygame.display.flip()
 
-playing = True
 while running:
     clock.tick(FPS)
     events()
