@@ -1,5 +1,5 @@
 TITLE = "Jumpy!"
-WIDTH = 480
+WIDTH = 1000
 HEIGHT = 600
 FPS = 60
 
