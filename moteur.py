@@ -1,13 +1,14 @@
 import pygame
+from os import path
 from settings import *
 
 vec = pygame.math.Vector2
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self,posx,posy,life):
+    def __init__(self,posx,posy,skin,life):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface((30, 40))
-        self.image.fill(YELLOW)
+        self.image = pygame.image.load(path.join(path.join(path.dirname(__file__), 'img'), skin)).convert()
+        self.image.set_alpha()
         self.rect = self.image.get_rect()
         self.pos = vec(posx, posy)
         self.vel = vec(0, 0)
@@ -35,14 +36,14 @@ class Player(pygame.sprite.Sprite):
         if hits:
             self.vel.y = -20
 
-    def shoot(self):
+    def shoot(self,skin):
 
         if self.life > 0:
             if self.vel.x >= 0:
-                bullet = Bullet(self.rect.right, self.rect.centery)
+                bullet = Bullet(self.rect.right, self.rect.centery, skin)
                 bullet.speedx = 10
             elif self.vel.x < 0:
-                bullet = Bullet(self.rect.left, self.rect.centery)
+                bullet = Bullet(self.rect.left, self.rect.centery, skin)
                 bullet.speedx = -10
 
             all_sprites.add(bullet)
@@ -69,10 +70,10 @@ class Player(pygame.sprite.Sprite):
         self.rect.midbottom = self.pos
 
 class Mob(pygame.sprite.Sprite):
-    def __init__(self,posx,posy,life,target):
+    def __init__(self,posx,posy,skin,life,target):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface((30, 40))
-        self.image.fill(RED)
+        self.image = pygame.image.load(path.join(path.join(path.dirname(__file__), 'img'), skin)).convert()
+        self.image.set_alpha()
         self.rect = self.image.get_rect()
         self.pos = vec(posx, posy)
         self.vel = vec(0, 0)
@@ -102,10 +103,10 @@ class Mob(pygame.sprite.Sprite):
         self.rect.midbottom = self.pos
 
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self, x, y):
+    def __init__(self, x, y, skin):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface((10, 20))
-        self.image.fill(YELLOW)
+        self.image = pygame.image.load(path.join(path.join(path.dirname(__file__), 'img'), skin)).convert()
+        self.image.set_alpha()
         self.rect = self.image.get_rect()
         self.rect.bottom = y
         self.rect.centerx = x
@@ -133,6 +134,7 @@ def damage_bullets(entity):
     touch_bullets = pygame.sprite.spritecollide(entity, bullets, False)
     if touch_bullets:
         entity.life -= 1
+        touch_bullets[0].kill()
 
     if entity.life <= 0:
         entity.kill()

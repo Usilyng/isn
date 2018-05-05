@@ -9,9 +9,9 @@ pygame.display.set_caption(TITLE)
 clock = pygame.time.Clock()
 running = True
 
-player = Player(WIDTH/4,HEIGHT/2,10000000000000000000000)
-player2 = Player((WIDTH/4)*3,HEIGHT/2,10000)
-mob = Mob(WIDTH-50, HEIGHT/2, 50,player)
+player = Player(WIDTH/4, HEIGHT/2, "player.png", 10000000000000000000000)
+player2 = Player((WIDTH/4)*3, HEIGHT/2, "player.png", 100)
+mob = Mob(WIDTH-50, HEIGHT/2, "mob.png", 50, player)
 mobs.add(mob)
 all_sprites.add(player)
 all_sprites.add(player2)
@@ -35,7 +35,7 @@ def events():
                 player.jump()
 
             if event.key == pygame.K_SPACE:
-                player.shoot()
+                player.shoot("bulet.png")
 
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_RIGHT:
@@ -58,7 +58,7 @@ def events():
                 player2.jump()
 
             if event.key == pygame.K_k:
-                player2.shoot()
+                player2.shoot("bulet.png")
 
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_d:
@@ -93,9 +93,9 @@ def update():
     damage_bullets(mob)
     damage_mobs(player)
     damage_mobs(player2)
-    test(player)
-    test(player2)
-    test(mob)
+    #test(player)
+    #test(player2)
+    #test(mob)
 
 def draw():
 	screen.fill(BLACK)
