@@ -5,8 +5,9 @@ FPS = 60
 
 # Player properties
 PLAYER_ACC = 0.5
+MOB_ACC = 0.4
 PLAYER_FRICTION = -0.12
-PLAYER_GRAV = 0.8
+GRAV = 0.8
 
 # Starting platforms
 PLATFORM_LIST = [(0, HEIGHT - 40, WIDTH, 40),
