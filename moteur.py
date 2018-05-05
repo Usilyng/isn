@@ -72,7 +72,7 @@ class Mob(pygame.sprite.Sprite):
     def __init__(self,posx,posy,life,target):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.Surface((30, 40))
-        self.image.fill(YELLOW)
+        self.image.fill(RED)
         self.rect = self.image.get_rect()
         self.pos = vec(posx, posy)
         self.vel = vec(0, 0)
