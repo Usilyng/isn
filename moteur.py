@@ -121,16 +121,57 @@ class Bullet(pygame.sprite.Sprite):
             self.kill()
 
 class Platform(pygame.sprite.Sprite):
-    def __init__(self, x, y, w, h):
+    def __init__(self, x, y, skin):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface((w, h))
-        self.image.fill(GREEN)
+        self.image = pygame.image.load(path.join(path.join(path.dirname(__file__), 'img'), skin)).convert()
+        self.image.set_alpha()
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
 
-def damage_bullets(entity):
+class Level_builder():
+    def __init__(self, level, skin_b, skin_p, skin_e, skin_d):
+        self.image_B = skin_b
+        self.image_P = skin_p
+        self.image_E = skin_e
+        self.image_D = skin_d
 
+        self.x = 0
+        self.y = 0
+
+        self.map_data = []
+        with open(level, 'rt') as f:
+            for line in f:
+                self.map_data.append(line)
+        
+    def build_level(self):
+        for row in self.map_data:
+            for col in row:
+
+       #         if col == "B":
+
+
+                if col == "P":
+                    p = Platform(self.x, self.y, self.image_P)
+                    all_sprites.add(p)
+                    platforms.add(p)
+
+    #           if col == "E":
+
+
+                if col == "D":
+                    d = Platform(self.x, self.y-20, self.image_D)
+                    p = Platform(self.x, self.y, self.image_P)
+                    all_sprites.add(d)
+                    all_sprites.add(p)
+                    traps.add(d)
+                    platforms.add(p)
+
+                self.x += 100
+            self.x = 0
+            self.y += 40
+
+def damage_bullets(entity):
     touch_bullets = pygame.sprite.spritecollide(entity, bullets, False)
     if touch_bullets:
         entity.life -= 1
@@ -140,7 +181,6 @@ def damage_bullets(entity):
         entity.kill()
 
 def damage_mobs(entity):
-
     touch_mobs = pygame.sprite.spritecollide(entity, mobs, False)
     if touch_mobs:
         entity.life -= 1
@@ -148,8 +188,15 @@ def damage_mobs(entity):
     if entity.life <= 0:
         entity.kill()
 
-def colision(entity):
+def damage_traps(entity):
+    touch_traps = pygame.sprite.spritecollide(entity, traps, False)
+    if touch_traps:
+        entity.life -= 1
 
+    if entity.life <= 0:
+        entity.kill()
+
+def colision(entity):
     if entity.vel.y > 0:
         hits = pygame.sprite.spritecollide(entity, platforms, False)
         if hits:
@@ -158,5 +205,6 @@ def colision(entity):
 
 all_sprites = pygame.sprite.Group()
 platforms = pygame.sprite.Group()
+traps = pygame.sprite.Group()
 bullets = pygame.sprite.Group()
 mobs = pygame.sprite.Group()

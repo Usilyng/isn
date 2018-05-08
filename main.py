@@ -16,10 +16,9 @@ mobs.add(mob)
 all_sprites.add(player)
 all_sprites.add(player2)
 all_sprites.add(mob)
-for plat in PLATFORM_LIST:
-    p = Platform(*plat)
-    all_sprites.add(p)
-    platforms.add(p)
+
+world = Level_builder("level.txt", "", "plat.png", "", "trap.png" )
+world.build_level()
 
 def events():
     for event in pygame.event.get():
@@ -93,6 +92,8 @@ def update():
     damage_bullets(mob)
     damage_mobs(player)
     damage_mobs(player2)
+    damage_traps(player)
+    damage_traps(player2)
     #test(player)
     #test(player2)
     #test(mob)
@@ -107,6 +108,7 @@ while running:
     events()
     update()
     draw()
+
     for event in pygame.event.get():
 
         if event.type == pygame.QUIT:
