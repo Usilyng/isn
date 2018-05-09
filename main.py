@@ -1,6 +1,7 @@
 import pygame
 from settings import *
 from moteur import *
+import threading
 
 pygame.init()
 pygame.mixer.init()
@@ -17,7 +18,7 @@ all_sprites.add(player)
 all_sprites.add(player2)
 all_sprites.add(mob)
 
-world = Level_builder("level.txt", "", "plat.png", "", "trap.png" )
+world = Level_builder("level.txt","", "", "plat.png", "", "trap.png" )
 world.build_level()
 
 def events():
@@ -84,9 +85,12 @@ def test(player):
 
 def update():
     all_sprites.update()
-    colision(player)
-    colision(player2)
-    colision(mob)
+    colision_plat(player)
+    colision_plat(player2)
+    colision_plat(mob)
+    colision_wall(player)
+    colision_wall(player2)
+    colision_wall(mob)
     damage_bullets(player)
     damage_bullets(player2)
     damage_bullets(mob)
@@ -106,8 +110,8 @@ def draw():
 while running:
     clock.tick(FPS)
     events()
-    update()
-    draw()
+    threading.Thread(target = update, args = ()).start()
+    threading.Thread(target = draw, args = ()).start()
 
     for event in pygame.event.get():
 

@@ -130,14 +130,15 @@ class Platform(pygame.sprite.Sprite):
         self.rect.y = y
 
 class Level_builder():
-    def __init__(self, level, skin_b, skin_p, skin_e, skin_d):
+    def __init__(self, level, skin_w, skin_b, skin_p, skin_e, skin_d):
+        self.image_W = skin_w
         self.image_B = skin_b
         self.image_P = skin_p
         self.image_E = skin_e
         self.image_D = skin_d
 
         self.x = 0
-        self.y = 0
+        self.y = -42000
 
         self.map_data = []
         with open(level, 'rt') as f:
@@ -148,16 +149,30 @@ class Level_builder():
         for row in self.map_data:
             for col in row:
 
-       #         if col == "B":
+                if col == "H":
+                    h = Platform(self.x, self.y, self.image_P)
+                    all_sprites.add(h)
+                    platforms.add(h)
 
+                if col == "W":
+                    w = Platform(self.x, self.y, self.image_P)
+                    all_sprites.add(w)
+                    walls.add(w)
+
+                if col == "B":
+                    p = Platform(self.x, self.y, self.image_P)
+                    all_sprites.add(p)
+                    platforms.add(p)
 
                 if col == "P":
                     p = Platform(self.x, self.y, self.image_P)
                     all_sprites.add(p)
                     platforms.add(p)
 
-    #           if col == "E":
-
+                if col == "E":
+                    p = Platform(self.x, self.y, self.image_P)
+                    all_sprites.add(p)
+                    platforms.add(p)
 
                 if col == "D":
                     d = Platform(self.x, self.y-20, self.image_D)
@@ -167,7 +182,7 @@ class Level_builder():
                     traps.add(d)
                     platforms.add(p)
 
-                self.x += 100
+                self.x += 50
             self.x = 0
             self.y += 40
 
@@ -196,15 +211,29 @@ def damage_traps(entity):
     if entity.life <= 0:
         entity.kill()
 
-def colision(entity):
+def colision_plat(entity):
     if entity.vel.y > 0:
         hits = pygame.sprite.spritecollide(entity, platforms, False)
         if hits:
             entity.pos.y = hits[0].rect.top
             entity.vel.y = 0
 
+def colision_wall(entity):
+    if entity.vel.x < 0:
+        hits = pygame.sprite.spritecollide(entity, walls, False)
+        if hits:
+            entity.pos.x = hits[0].rect.right + (entity.rect.w/2)
+            entity.vel.x = 0
+
+    if entity.vel.x > 0:
+        hits = pygame.sprite.spritecollide(entity, walls, False)
+        if hits:
+            entity.pos.x = hits[0].rect.left - (entity.rect.w/2)
+            entity.vel.x = 0
+    
 all_sprites = pygame.sprite.Group()
 platforms = pygame.sprite.Group()
+walls = pygame.sprite.Group()
 traps = pygame.sprite.Group()
 bullets = pygame.sprite.Group()
 mobs = pygame.sprite.Group()
