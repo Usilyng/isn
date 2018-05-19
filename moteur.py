@@ -1,6 +1,6 @@
 import pygame
 from os import path
-from settings import *
+from Cavaaller3 import *
 
 vec = pygame.math.Vector2
 
@@ -138,13 +138,13 @@ class Level_builder():
         self.image_D = skin_d
 
         self.x = 0
-        self.y = -42000
+        self.y = -4200
 
         self.map_data = []
         with open(level, 'rt') as f:
             for line in f:
                 self.map_data.append(line)
-        
+
     def build_level(self):
         for row in self.map_data:
             for col in row:
@@ -158,6 +158,7 @@ class Level_builder():
                     w = Platform(self.x, self.y, self.image_P)
                     all_sprites.add(w)
                     walls.add(w)
+                    platforms.add(w)
 
                 if col == "B":
                     p = Platform(self.x, self.y, self.image_P)
@@ -181,8 +182,9 @@ class Level_builder():
                     all_sprites.add(p)
                     traps.add(d)
                     platforms.add(p)
+                    platforms.add(d)
 
-                self.x += 50
+                self.x += 100
             self.x = 0
             self.y += 40
 
@@ -230,7 +232,7 @@ def colision_wall(entity):
         if hits:
             entity.pos.x = hits[0].rect.left - (entity.rect.w/2)
             entity.vel.x = 0
-    
+
 all_sprites = pygame.sprite.Group()
 platforms = pygame.sprite.Group()
 walls = pygame.sprite.Group()
