@@ -16,12 +16,13 @@ running = True
 def fleche(position1, position2, position3):
     triangle = pygame.draw.polygon(screen, YELLOW,(position1, position2, position3), 6)
 
-bgrd_menu1=pygame.image.load("FOND_menu_play.png")
+bgrd_menu1=pygame.image.load(path.join(path.join(path.dirname(__file__), 'img'), "FOND_menu_play.png"))
 screen.blit(bgrd_menu1, (0,0))
 pygame.display.flip()
 
-bgrdmenu1=pygame.image.load("FOND_perso.png")
-screen.blit(bgrdmenu1, (0,0))
+bgrdmenu1=pygame.image.load(path.join(path.join(path.dirname(__file__), 'img'), "FOND_perso.png"))
+
+bgrd_pause=pygame.image.load(path.join(path.join(path.dirname(__file__), 'img'), "pause.png"))
 
 menu_entre=True
 menu_perso=False
@@ -36,6 +37,7 @@ pos_fleche_p2=((740,190),(850,190),(805,270))
 
 choix_entre=1
 choix_perso=1
+choix_pause=1
 
 jeu_solo=False
 jeu_multi=False
@@ -47,13 +49,13 @@ class SinglePlayer():
     def __init__(self, skin):
         
         self.playing = True 
-        self.player = Player(500, 550, skin, 150)
+        self.player = Player(500, 550, skin, 200)
         self.mob = Mob(WIDTH-50, (HEIGHT/2), "mob.png", 50, self.player) 
         self.final_mob = Mobf(650,100, "final_mob.png", 50, self.player)
 
         mobs.add(self.mob) 
         mobs.add(self.final_mob)
-        all_sprites.add(self.player) 
+        all_sprites.add(self.player)
         all_sprites.add(self.mob) 
         all_sprites.add(self.final_mob)
 
@@ -245,7 +247,10 @@ class Multiplayer():
                     sprite.kill()
 
         if self.player.life <= 0:
-            self.playing = False 
+            for sprite in all_sprites:
+                sprite.kill()
+
+            self.playing = False
                     
         if len(platforms) == 0: 
             self.playing = False 
@@ -344,7 +349,8 @@ while running:
                 if event.key==K_ESCAPE:
                     menu_entre = True
                     menu_perso=False
-
+                    screen.blit(bgrd_menu1, (0,0))
+                    pygame.display.flip()
 
                 if event.key==K_LEFT:
                     choix_perso-=1
@@ -389,6 +395,8 @@ while running:
                 if event.key==K_ESCAPE:
                     menu_entre = True
                     menu_perso_multi=False
+                    screen.blit(bgrd_menu1, (0,0))
+                    pygame.display.flip()
 
 
                 if event.key==K_LEFT:
@@ -432,13 +440,61 @@ while running:
     while jeu_solo:
         timer.tick(FPS)
         game = SinglePlayer(skin)
-    
+        menu_pause=False
+
         while game.playing:
+
             game.events()
             game.update()
             draw()
 
-            jeu_multi = game.playing
+            """
+            for event in pygame.event.get():
+            
+                if event.type==KEYDOWN:
+                    if event.key==K_ESCAPE:
+                        menu_pause=True
+                        screen.blit(bgrd_pause, (300,0))
+                        pygame.display.flip()
+
+            while menu_pause :
+
+                if event.key==K_DOWN:
+                    choix_pause+=1
+                    screen.blit(bgrd_pause, (300,0))
+                    if choix_pause==1:
+                        fleche((215,320),(280,350),(215,380))
+                    if choix_pause==2:
+                        fleche((215,440),(280,470),(215,500))
+                    if choix_pause==3:
+                        choix_pause=1
+                        fleche((215,320),(280,350),(215,380))
+                    pygame.display.flip()
+
+
+                if event.key==K_UP:
+                    choix_pause-=1
+                    screen.blit(bgrd_pause, (300,0))
+                    if choix_pause==1:
+                        fleche((215,320),(280,350),(215,380))
+                    if choix_pause==2:
+                        fleche((215,440),(280,470),(215,500))
+                    if choix_pause==0:
+                        choux_pause=1
+                        fleche((215,320),(280,350),(215,380))
+                    pygame.display.flip()
+
+                if event.key==K_RETURN:
+                    if choix_pause==1 or choix_pause==0 or choix_pause==3:
+                        menu_pause=False
+                        pygame.display.flip()
+                            
+                    if choix_pause==2:
+                        running=False
+                        menu_pause=False
+                        pygame.display.flip()
+"""
+
 
     while jeu_multi:
         timer.tick(FPS)
@@ -448,8 +504,5 @@ while running:
             game.events()
             game.update()
             draw()
-
-            jeu_multi = game.playing
-
 
 pygame.quit()
