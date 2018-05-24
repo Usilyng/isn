@@ -29,13 +29,13 @@ PPPPPPPPPPPPPPPPPPPP
          WW
          WW  
          WW
-    DPDP WW     DPDP
+    DPPP WW     DPPP
          WW
  PPP     WW  PPP 
          WW
          WW     
          WW
-  P  DD  WW   P  DD
+ PPP  DD WW   PPP  DD
          WW
          WW     
          WW
@@ -47,13 +47,13 @@ PPPPPPPPPPPPPPPPPPPP
          WW
        P WW        P
          WW
- DPDPPDP WW  DPDPPDP
+ DPPDPPD WW  DPPDPPD
          WW
-  DDDDDD WW   DDDDDD
+    DDDD WW     DDDD
  P       WW P
          WW    
          WW
- DPD P   WW  DPD P
+ DP P    WW  DP P
          WW
          WW     
          WW
@@ -61,11 +61,11 @@ PPPPPPPPPPPPPPPPPPPP
          WW
          WW       
          WW   
- PDDPP   WW  PDDPP
+ PPPPP   WW  PPPPP
          WW  
          WW    
          WW  
-  PPPDD  WW   PPPDD
+  PPPPDD WW   PPPPDD
          WW 
          WW      
          WW
@@ -73,7 +73,7 @@ PPPPPPPPPPPPPPPPPPPP
          WW
          WW     
          WW
-    PPDD WW      PPDD
+    PP D WW      PP D
          WW
          WW    
          WW
@@ -93,7 +93,7 @@ PPPPPPPPPPPPPPPPPPPP
          WW 
          WW     
          WW
- DD  P   WW  DD  P
+ DDPPP   WW  DDPPP
          WW
          WW       
          WW
@@ -101,20 +101,20 @@ PPPPPPPPPPPPPPPPPPPP
          WW
          WW 
          WW
-  DPD    WW  DPD
+  DPP    WW  DPP
          WW
          WW  
          WW
-  DPPP   WW   DPPP
+  PPPP   WW   PPPP
          WW 
          WW       
          WW 
-  P DD   WW   P DD
+  P PD   WW   P PD
          WW  
          WW 
          WW
   DPPPP  WW  DPPPP
          WW      
-    PDPP WW PDPP  
+    PPPP WW PPPP  
          WW        
  PPPPPPPPPPPPPPPPPP
